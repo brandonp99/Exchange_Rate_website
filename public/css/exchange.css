@@ -1,5 +1,5 @@
 body{
-    background-color: #232125;
+    background-color: white;
 }
 
 h1{
@@ -8,4 +8,8 @@ h1{
 
 ul{
     background-color: whitesmoke;
+}
+
+.modal{
+    display: none;
 }

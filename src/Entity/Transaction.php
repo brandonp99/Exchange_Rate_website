@@ -45,6 +45,16 @@ class Transaction
     /**
      * @ORM\Column(type="float")
      */
+    private $target_ammount;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $target_currency;
+
+    /**
+     * @ORM\Column(type="float")
+     */
     private $exchange_rate;
 
     /**
@@ -52,6 +62,7 @@ class Transaction
      */
     private $request_ip;
 
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -137,6 +148,30 @@ class Transaction
     public function setRequestIp(string $request_ip): self
     {
         $this->request_ip = $request_ip;
+
+        return $this;
+    }
+
+    public function getTargetAmmount(): ?float
+    {
+        return $this->target_ammount;
+    }
+
+    public function setTargetAmmount(float $target_ammount): self
+    {
+        $this->target_ammount = $target_ammount;
+
+        return $this;
+    }
+
+    public function getTargetCurrency(): ?string
+    {
+        return $this->target_currency;
+    }
+
+    public function setTargetCurrency(string $target_currency): self
+    {
+        $this->target_currency = $target_currency;
 
         return $this;
     }

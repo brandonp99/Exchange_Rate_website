@@ -39,4 +39,19 @@ class TransactionController extends AbstractController
             return new Response('Saved new transaction with id '.$transaction->getId());
         }
     }
+
+    public function getAll(){
+        $transactions = $this->getDoctrine()
+            ->getRepository(Transaction::class)
+            ->findAll();
+
+        if (!$transactions) {
+            throw $this->createNotFoundException(
+                'No transactions were found'
+            );
+        }
+
+        return $transactions;
+
+    }
 }
