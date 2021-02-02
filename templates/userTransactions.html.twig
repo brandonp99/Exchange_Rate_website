@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>Exchange Rate</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="css/exchange.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
+.w3-bar,h1,button {font-family: "Montserrat", sans-serif}
+.fa-anchor,.fa-coffee {font-size:200px}
+</style>
+<body>
+
+<!-- Header -->
+<header class="w3-container w3-red w3-center" style="padding:80px 16px">
+    <h5>{{ message }}</h5>
+  <h1 class="w3-margin w3-jumbo">Exchange Rate</h1>
+</header>
+
+<!-- First Grid -->
+<div class="w3-row-padding w3-padding-64 w3-container">
+  <div class="w3-content">
+
+    <div>
+        <table style="width:100%">
+            <tr>
+                <th>Edit Transaction</th>
+                <th>ID</th>
+                <th>Payment Method</th>
+                <th>Transaction Type</th>
+                <th>Transaction Timestamp</th>
+                <th>Base Ammount</th>
+                <th>Base Currency</th>
+                <th>Target Ammount</th>
+                <th>Target Currency</th>
+                <th>Exchange Rate</th>
+                <th>Request IP</th>
+            </tr>
+       {% for transaction in transactions %}
+            <tr>
+                <form action="/exchange/userTransactions/{{transaction.getId}}?limit=15&offset=1" method="post">
+                    <td><button type="submit" data-toggle="modal" >Edit</button></td>
+                </form>
+                <th>{{ transaction.getId }}</th>
+                <th>{{ transaction.getPaymentMethod }}</th>
+                <th>{{ transaction.getTransactionType }}</th>
+                <th>{{ transaction.getTransactionTimestamp }}</th>
+                <th>{{ transaction.getBaseAmount }}</th>
+                <th>{{ transaction.getBaseCurrency }}</th>
+                <th>{{ transaction.getTargetAmmount }}</th>
+                <th>{{ transaction.getTargetCurrency }}</th>
+                <th>{{ transaction.getExchangeRate }}</th>
+                <th>{{ transaction.getRequestIp }}</th>
+            </tr>
+       {% endfor %}
+       </table>
+
+       <div id="myModal" class="modal fade" role="dialog">
+          <div class="modal-header">
+            <div class="modal-content">
+                {{ form(form) }}
+            </div>
+          </div>
+
+        </div>
+    </div>
+    <form action="/exchange">
+      <input type="submit" value="Back to main Page" />
+    </form>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="w3-container w3-padding-64 w3-center w3-opacity">  
+  
+</footer>
+
+<script>
+// Used to toggle the menu on small screens when clicking on the menu button
+  $(window).on('load', function() {
+        $('#myModal').modal('show');
+    });
+</script>
+
+</body>
+</html>

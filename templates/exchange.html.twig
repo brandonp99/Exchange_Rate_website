@@ -8,6 +8,10 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 .w3-bar,h1,button {font-family: "Montserrat", sans-serif}
@@ -17,6 +21,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 
 <!-- Header -->
 <header class="w3-container w3-red w3-center" style="padding:80px 16px">
+  <h5>{{ message }}</h5>
   <h1 class="w3-margin w3-jumbo">Exchange Rate</h1>
 </header>
 
@@ -34,36 +39,25 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
         </tr>
         {% for key, value in currencies.rates %}
         <tr>
-            <td><button type="button" data-toggle="modal" data-target="#myModal"> {{ key }}</button></td>
+            <td>{{ key }}</td>
             <td>{{ value }}</td>
         </tr>
         {% endfor %}
         </table>
 
-        <div id="myModal" class="modal hide fade">
-          <form>
-            <label for="payment_method">Payment Method: </label><br>
-            <select name="payment_method" id="payment_method">
-              <option value="Card">Card</option>
-              <option value="Transfer">Bank Transfer</option>
-            </selct><br>
-            <label for="transaction_type">Transaction Type: </label><br>
-            <select name="transaction_type" id="transaction_type">
-              <option value="deposit">Deposit</option>
-              <option value="withdraw">Withdraw</option>
-            </selct><br>
-            <label for="base_ammount">Ammount(EUR): </label><br>
-            <input type="number" name="base_ammount" id="base_ammount" min="1" max="100000"><br>
-            <label for="target_currency">Target Currency: </label><br>
-            <select name="target_currency" id="target_currency">
-            {% for key in currencies.rates %}
-              <option value={{ key }}>{{ key }}</option>
-            {% endfor %}
-            </selct><br>
-          </form>
+        <div id="myModal" class="modal fade" role="dialog">
+          <div class="modal-header">
+            <div class="modal-content">
+              {{ form(form) }}
+            </div>
+          </div>
 
         </div>
     </div>
+    <button type="button" data-toggle="modal" data-target="#myModal" >New Transaction</button>
+    <form action="/exchange/userTransactions?limit=15&offset=1" method="post">
+      <input type="submit" value="See my Transactions" />
+    </form>
   </div>
 </div>
 
@@ -71,18 +65,5 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 <footer class="w3-container w3-padding-64 w3-center w3-opacity">  
   
 </footer>
-
-<script>
-// Used to toggle the menu on small screens when clicking on the menu button
- function myFunction() {
-  var x = document.getElementById("navDemo");
-  if (x.className.indexOf("w3-show") == -1) {
-    x.className += " w3-show";
-  } else { 
-    x.className = x.className.replace(" w3-show", "");
-  }
-}
-</script>
-
 </body>
 </html>

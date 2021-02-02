@@ -4,46 +4,67 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Cache\Adapter\RedisAdapter;
+use Symfony\Component\Cache\Adapter\RedisTagAwareAdapter;
+use Symfony\Contracts\Cache\ItemInterface;
+use App\Entity\Transaction;
+use Symfony\Component\HttpFoundation\Request;
 
 class ExchangeController extends AbstractController
 {
+    private $cache;
 
     public function __construct(HttpClientInterface $client)
     {
+
         $this->client = $client;
 
-    }
-
-    public function listAll(): Response
-    {
-        $response = $this->client->request(
-            'GET',
-            'https://api.exchangeratesapi.io/latest'
+        $redis = RedisAdapter::createConnection(
+            'redis://localhost:3679'
         );
 
-        $statusCode = $response->getStatusCode();
-        $content = $response->getContent();
+        $this->cache = new RedisTagAwareAdapter($redis);
+    }
+
+    public function listAll()
+    {
+
+        $content = $this->cache->get('currencies', function (ItemInterface $item) {
+            $item->expiresAfter(30);
+        
+             $response = $this->client->request(
+                    'GET',
+                    'https://api.exchangeratesapi.io/latest'
+                );
+        
+             $statusCode = $response->getStatusCode();
+                $content = $response->getContent();
+        
+            return $content;
+        });
+        
         $currencies = json_decode($content, JSON_OBJECT_AS_ARRAY);
 
 
 
-        return $this->render('exchange.html.twig', [
-            'currencies' => $currencies
-        ]);
+        return $currencies;
     }
 
-    public function getRateByCurrency($currency)
+    public function showTransactions(Request $request)
     {
-        $response = $this->client->request(
-            'GET',
-            'https://api.exchangeratesapi.io/latest?symbols=' . $currency
+        $ip = array(
+            'request_ip' => TransactionController::getUserIpAddr()
         );
 
-        $statusCode = $response->getStatusCode();
-        $res = $response->getContent();
-        $rate = json_decode($res, JSON_OBJECT_AS_ARRAY);
-
-        return array_values($rate);
-
+        $transactions = $this->getDoctrine()
+            ->getRepository(Transaction::class)
+            ->findBy($ip, null, $request->query->get('limit'), $request->query->get('offset'));
+        
+        if (!$transactions) {
+            throw $this->createNotFoundException(
+                'no transactions found'
+            );
+        }
+        return $transactions;
     }
 }

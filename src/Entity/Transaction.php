@@ -92,9 +92,14 @@ class Transaction
         return $this;
     }
 
-    public function getTransactionTimestamp(): ?\DateTimeInterface
+    public function getTransactionTimestamp(): ?string
     {
-        return $this->transaction_timestamp;
+        $result = $this->transaction_timestamp->format('Y-m-d H:i:s');
+        if ($result) {
+            return $result;
+        }else {
+            echo "Unknown Time";
+        }
     }
 
     public function setTransactionTimestamp(\DateTimeInterface $transaction_timestamp): self
