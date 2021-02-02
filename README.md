@@ -1,19 +1,23 @@
 # Currency Exchange Web App
+
 A Web application to view current currency Exchange rates and make transactions from one currency to another to be stored in a database.
 
 ## Set Up
 
  1. Install packages
+ 
 composer install
 
 symfony pecl install redis
 
 2. Run docker containers
+
 docker run --network myNetwork --name mariaDB1 -e MYSQL_ROOT_PASSWORD=root1234 -p -d 3306:3306 mariadb:latest
 
 docker run --network myNetwork --name redis1 -p -d 3679:3679 redis:latest
 
 3. Start symfony server
+
 symfony server:start
 
 
