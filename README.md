@@ -13,7 +13,14 @@ docker run --network myNetwork --name mariaDB1 -e MYSQL_ROOT_PASSWORD=root1234 -
 
 docker run --network myNetwork --name redis1 -p -d 3679:3679 redis:latest
 
-3. Start symfony server
+3. Set Up Database
+php bin/console doctrine:database:create
+
+php bin/console make:migration
+
+php bin/console doctrine:migrations:migrate
+
+4. Start symfony server
 symfony server:start
 
 
