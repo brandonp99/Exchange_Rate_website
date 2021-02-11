@@ -37,7 +37,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
             <th>Currency</th>
             <th>Cost in Eur</th>
         </tr>
-        {% for key, value in currencies.rates %}
+        {% for key, value in currencies %}
         <tr>
             <td>{{ key }}</td>
             <td>{{ value }}</td>
@@ -55,7 +55,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
         </div>
     </div>
     <button type="button" data-toggle="modal" data-target="#myModal" >New Transaction</button>
-    <form action="/exchange/userTransactions?limit=15&offset=1" method="post">
+    <form action="/exchange/userTransactions?limit=15&offset=0" method="post">
       <input type="submit" value="See my Transactions" />
     </form>
   </div>

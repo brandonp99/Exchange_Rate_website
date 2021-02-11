@@ -1,7 +1,6 @@
 <?php
 namespace App\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
@@ -9,6 +8,7 @@ use Symfony\Component\Cache\Adapter\RedisTagAwareAdapter;
 use Symfony\Contracts\Cache\ItemInterface;
 use App\Entity\Transaction;
 use Symfony\Component\HttpFoundation\Request;
+use App\Util\ToolsController;
 
 class ExchangeController extends AbstractController
 {
@@ -45,15 +45,20 @@ class ExchangeController extends AbstractController
         
         $currencies = json_decode($content, JSON_OBJECT_AS_ARRAY);
 
+        $currencies['rates']['EUR'] = 1.0;
+
+        $keys = array_keys($currencies['rates']);
+        $newRates = array_combine($keys, $keys);
 
 
-        return $currencies;
+
+        return $newRates;
     }
 
-    public function showTransactions(Request $request)
+    public function showTransactions(Request $request, ToolsController $tools)
     {
         $ip = array(
-            'request_ip' => TransactionController::getUserIpAddr()
+            'request_ip' => $tools->getUserIpAddr()
         );
 
         $transactions = $this->getDoctrine()
